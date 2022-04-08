@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import Button from '../Input/Button';
 import AccountLayout from './AccountLayout';
@@ -13,17 +13,27 @@ import { fetchUserDetails, proceedUserUpdateDetails } from '../../util/authAPI';
 import CustomSwitch from '../Input/CustomSwitch';
 import AddressPanel from '../Input/AddressPanel';
 import MyFormHelperText from '../Input/MyFormHelperText';
+import { UserContext } from '../../context/user/UserProvider';
 
+const trimAll = (items) => {
+    return items.map((item, idx) =>
+        item instanceof String ? item.trim() : item
+    );
+};
 export default function AccountMyDetail(props) {
     const { route } = props;
     const { name, path, key, params } = route;
+    // const { userInfo } = params;
+    const { user } = useContext(UserContext);
 
+    const [result, setResult] = useState({});
+    const [errors, setErrors] = useState({});
     const initValue = {
-        clientid: 'testclient',
+        clientID: 'testclient',
         loginID: 'testclient',
         password: 'asd123',
-        firstname: 'Ted',
-        surname: 'Testing',
+        firstname: 'faser',
+        surname: 'qwerqw',
         dateDOB: 14,
         monthDOB: 2,
         yearDOB: 1987,
@@ -32,28 +42,30 @@ export default function AccountMyDetail(props) {
         mobile: '0410522443',
         stNo: '10',
         stName: 'Osbornes',
-        streettype: 'PDE',
+        stType: 'PDE',
         locality: 'Warilla',
-        postCode: '2528',
-        county: 'Australia',
-        APTNO: '0',
-        STNUMBER: '0',
+        postcode: '2528',
+        country: 'Australia',
+        aptNo: '0',
+        // STNUMBER: '0',
         STREET: 'STREET',
         maillist: '0',
         address: '',
-        manualAddressing: false,
     };
-    const [result, setResult] = useState({});
-    const [errors, setErrors] = useState({});
-    const [formInput, setFormInput] = useState({
-        loginID: 'Steve',
-    });
+
+    const [formInput, setFormInput] = useState(initValue);
     //const [manualAddressing, setManualAddressing] = useState(false);
 
     const handleChange = (value, namen) => {
+        let v =
+            value instanceof String
+                ? value.trim()
+                : value === undefined
+                ? ''
+                : value;
         setFormInput({
             ...formInput,
-            [namen]: value,
+            [namen]: v,
         });
     };
     const handleValidate = (namen) => {
@@ -61,40 +73,46 @@ export default function AccountMyDetail(props) {
         doValidate(formInput);
     };
 
-    const doValidate = useCallback(async (value2) => {
-        const _error = await VALIDATE(
-            value2,
-            initValue.loginID,
-            setValidID,
-            initValue.validEmail,
-            setValidEmail,
-            initValue.mobile,
-            setValidMobile,
-            undefined
-        );
+    const doValidate = async (value2) => {
+        const _errors =
+            (await VALIDATE(
+                value2,
+                initValue.loginID,
+                setValidID,
+                initValue.validEmail,
+                setValidEmail,
+                initValue.mobile,
+                setValidMobile,
+                undefined
+            )) || {};
+        setErrors(_errors);
+    };
 
-        console.log('After validate, ', _error);
-        setErrors(_error);
+    useEffect(() => {
+        if (user && user.user) {
+            loadUserDetails(user.user.CLIENTID);
+        }
+        // setData(data1);
     }, []);
 
-    const getUserDetails = useCallback(async () => {
-        //suppose loginID = testclient
-        const data2 = fetchUserDetails() || {};
-        // console.log('getUserDetails called..', data2);
+    const loadUserDetails = async (clientid) => {
+        // suppose loginID = testclient
+        const data2 = await fetchUserDetails({ clientid });
+        console.log('fetchUserDetails called..', {
+            ...formInput,
+            ...data2.mydetail,
+        });
         if (data2 && data2.mydetail)
-            setFormInput({
-                ...formInput,
-                ...data2.mydetail,
-                manualAddressing: false,
-            });
-        else setFormInput(initValue);
-    }, []);
+            setFormInput({ ...formInput, ...data2.mydetail });
+    };
 
     const handleSave = () => {
-        doSave();
+        doSave(formInput);
     };
-    const doSave = useCallback(async () => {
-        const _result = (await proceedUserUpdateDetails(formInput)) || {};
+
+    const doSave = useCallback(async (value) => {
+        const _result = (await proceedUserUpdateDetails(value)) || {};
+        console.log('MyDetailForm doSave= ', _result);
         if (_result) {
             if (_result.error) {
                 setResult({ status: 404, msg: _result.desc });
@@ -112,10 +130,6 @@ export default function AccountMyDetail(props) {
             setResult({ status: 403, msg: 'Network error' });
         }
     });
-
-    useEffect(() => {
-        getUserDetails();
-    }, []);
 
     const setValidID = (validID) => {};
 
@@ -148,9 +162,9 @@ export default function AccountMyDetail(props) {
                                 errors.loginID == '' ? null : errors.loginID
                             }
                             disabled
-                            value={formInput.firstName}
-                            onChange={(v) => handleChange(v, 'firstName')}
-                            onBlur={() => handleValidate('firstName')}
+                            value={formInput.firstname}
+                            onChange={(v) => handleChange(v, 'firstname')}
+                            onBlur={() => handleValidate('firstname')}
                         />
                     </View>
                     <View style={styles.inputContainer} key={2}>
@@ -163,9 +177,9 @@ export default function AccountMyDetail(props) {
                                 errors.loginID == '' ? null : errors.loginID
                             }
                             disabled
-                            value={formInput.loginID}
-                            onChange={(v) => handleChange(v, 'loginID')}
-                            onBlur={() => handleValidate('loginID')}
+                            value={formInput.surname}
+                            onChange={(v) => handleChange(v, 'surname')}
+                            onBlur={() => handleValidate('surname')}
                         />
                     </View>
                     <View style={styles.inputContainer} key={3}>

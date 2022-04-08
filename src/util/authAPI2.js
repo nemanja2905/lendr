@@ -1,6 +1,7 @@
-import { config } from '@Config';
+import authAPI from '../components/utils/authAPI';
+
 export const getAllSports = async (sportcode = undefined) => {
-    const url = `${config.domain}/sports/getAllSports`;
+    const url = `${process.env.server}/sports/getAllSports`;
     const response = await authAPI(
         url,
         {
@@ -16,7 +17,7 @@ export const getAllSports = async (sportcode = undefined) => {
 };
 
 export const getAllRaces = async (racetype = undefined) => {
-    const url = `${config.domain}/races/getAllRaces`;
+    const url = `${process.env.server}/races/getAllRaces`;
     const response = await authAPI(
         url,
         {
@@ -38,20 +39,20 @@ export const getAllRaces = async (racetype = undefined) => {
 //04/05/2022 Sergey
 
 export const proceedUserUpdateDetails = async (value) => {
-    const url = `${config.domain}/user/updateuserdetail`;
+    const url = `${process.env.server}/user/updateuserdetail`;
 
     const response = await authAPI(url, value, 'POST', false);
-    // console.log('proceedUserUpdateDetails', response);
+    console.log('proceedUserUpdateDetails', response);
     if (response.error) {
         return response;
     }
 
-    // console.log('proceedUserUpdateDetails', response.data);
+    console.log('proceedUserUpdateDetails', response.data);
     return response.data;
 };
 
 export const fetchUserDetails = async (data = { clientid: 'testclient' }) => {
-    const url = `${config.domain}/user/userdetails`;
+    const url = `${process.env.server}/user/userdetails`;
     // if (data === undefined) data = '{"clientid":"testclient"}';
     const response = await authAPI(url, data, 'POST', false);
     // console.log("fetch from user/userdetails", response.data);
@@ -65,7 +66,7 @@ export const fetchUserDetails = async (data = { clientid: 'testclient' }) => {
 };
 
 export const proceedUserChangePass = async (value = {}) => {
-    const url = `${config.domain}/user/UserChangePass`;
+    const url = `${process.env.server}/user/UserChangePass`;
     let body = {
         clientid: value.clientid,
         current: value.password,
@@ -74,7 +75,7 @@ export const proceedUserChangePass = async (value = {}) => {
     // const str2 = body.replace(/\\/g, '');
     const response = await authAPI(url, body, 'POST', false);
 
-    console.log('proceedUserChangePass params=', body, ',REsponse=', response);
+    // console.log('proceedUserChangePass', response);
     if (response.error) {
         return response;
     }
@@ -84,7 +85,7 @@ export const proceedUserChangePass = async (value = {}) => {
 };
 
 export const proceedUserSettings = async (value = {}) => {
-    const url = `${config.domain}/user/usersettings`;
+    const url = `${process.env.server}/user/usersettings`;
     const response = await authAPI(url, value, 'POST', false);
 
     // console.log('proceedUserSettings', response);
@@ -97,7 +98,7 @@ export const proceedUserSettings = async (value = {}) => {
 };
 
 export const getCreditCards = async (data = { clientid: 'testclient' }) => {
-    const url = `${config.domain}/user/creditcards`;
+    const url = `${process.env.server}/user/creditcards`;
 
     const response = await authAPI(url, data, 'POST', false);
     console.log('getCreditCards', data, response);
@@ -112,13 +113,12 @@ export const getCreditCards = async (data = { clientid: 'testclient' }) => {
 export const proceedCreditCardVerify = async (
     body = { clientid: 'testclient' }
 ) => {
-    const url = `${config.domain}/user/ccverify`;
+    const url = `${process.env.server}/user/ccverify`;
 
     // const str2 = body.replace(/\\/g, '');
     // console.log('proceedCreditCardVerify', url, str2);
     const response = await authAPI(url, body, 'POST', false);
 
-    console.log('proceedCreditCardVerify response=', response);
     if (response.error) {
         return response;
     }
@@ -130,7 +130,7 @@ export const proceedCreditCardVerify = async (
 export const proceedCreditCardUnregister = async (
     body = { clientid: 'testclient' }
 ) => {
-    const url = `${config.domain}/user/CCUnregister`;
+    const url = `${process.env.server}/user/CCUnregister`;
 
     const response = await authAPI(url, body, 'POST', false);
 
@@ -146,11 +146,11 @@ export const fetchUserBenefits = async (
     body = { clientid: 'testclient' }
 ) => {
     let urls = [
-        `${config.domain}/user/pointsredeem`,
-        `${config.domain}/user/pointsautoredeem`,
+        `${process.env.server}/user/pointsredeem`,
+        `${process.env.server}/user/pointsautoredeem`,
     ];
 
-    // const url = `${config.domain}/user/pointsredeem`;
+    // const url = `${process.env.server}/user/pointsredeem`;
     //const body = `{"clientid":"testclient","points":"${_points}"}`;
     console.log('fetchUserBenefits() called with', body);
     const response = await authAPI(urls[selected], body, 'POST', false);
@@ -163,14 +163,15 @@ export const fetchUserBenefits = async (
     return response.data;
 };
 
-export const fetchBenefitsRewards = async (body) => {
-    const url = `${config.domain}/user/benefits`;
+export const fetchBenefitsRewards = async (
+    body = { clientid: 'testclient' }
+) => {
+    const url = `${process.env.server}/user/benefits`;
     //const body = `{"clientid":"testclient","points":"${_points}"}`;
     // console.log('fetchBenefitsRewards() called with', body);
-
     const response = await authAPI(url, body, 'POST', false);
-    // console.log('fetchBenefitsRewards() results=', body, ':', response);
-    if (response.error === true) {
+
+    if (response.error) {
         return {
             balance: 0.0,
             count1: 0,
@@ -181,7 +182,7 @@ export const fetchBenefitsRewards = async (body) => {
     }
 
     // console.log('fetch from fetchBenefitsRewards', response.data);
-    const apts = response.data.POINTS.opts[0].apts || 0;
+    const apts = response.data.POINTS.opts[0].apts;
     const dbvs = response.data.BOOST.dbvs;
     const rval = response.data.BONUSBET?.fbvs[0]?.rval || 0;
     let count1 = 0;
@@ -200,14 +201,13 @@ export const fetchBenefitsRewards = async (body) => {
         count1,
         count2,
         totalCount: count1 + count2,
-        bonusBet: count1 + count2,
         reward: apts,
     };
     // return response.data;
 };
 
 export const fetchDepositLimit = async (body = { clientid: 'testclient' }) => {
-    const url = `${config.domain}/user/getDepositLimit`;
+    const url = `${process.env.server}/user/getDepositLimit`;
 
     const response = await authAPI(url, body, 'POST', false);
     const data2 = { ...response.data };
@@ -226,7 +226,7 @@ export const fetchDepositLimit = async (body = { clientid: 'testclient' }) => {
 export const proceedDepositLimit = async (
     body = { clientid: 'testclient' }
 ) => {
-    const url = `${config.domain}/user/setDepositLimit`;
+    const url = `${process.env.server}/user/setDepositLimit`;
 
     let response = await authAPI(url, body, 'POST', false);
     console.log('response from setDeposit Limit', response);
@@ -241,7 +241,7 @@ export const proceedDepositLimit = async (
 };
 
 export const proceedSelfSuspend = async (body = { clientid: 'testclient' }) => {
-    const url = `${config.domain}/user/SelfSuspend`;
+    const url = `${process.env.server}/user/SelfSuspend`;
 
     let response = await authAPI(url, body, 'POST', false);
     console.log('response from SelfSuspend Limit', response);
@@ -252,52 +252,3 @@ export const proceedSelfSuspend = async (body = { clientid: 'testclient' }) => {
 
     return response.data;
 };
-
-async function authAPI(url, body, method) {
-    let count = 0;
-    let options = {
-        method: method,
-        mode: 'cors',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'text/plain',
-            XAPIGTO: 'EB',
-        },
-    };
-    if (method === 'POST') {
-        options.body = JSON.stringify(body);
-    }
-    // options.body = body;
-
-    do {
-        try {
-            count++;
-
-            const responseJson = await (await fetch(url, options)).json();
-            if (responseJson.ERROBJ?.ERRORCODE === 1) {
-                console.log('error code 1');
-                return { error: true, desc: responseJson.ERROBJ.ERRORDESC };
-            } else if (responseJson.ERROBJ?.ERRORCODE === 403) {
-                if (count === 3) {
-                    return {
-                        error: true,
-                        desc: responseJson.ERROBJ.ERRORDESC,
-                    };
-                }
-                console.log('error code 403');
-                const update = await updateToken();
-                console.log('update is', update);
-                if (!update) {
-                    return {
-                        error: true,
-                        desc: 'Unauthorized request',
-                    };
-                }
-            } else {
-                return { error: false, data: responseJson };
-            }
-        } catch (e) {
-            return { error: true, desc: '404 - Something went wrong', e };
-        }
-    } while (count < 3);
-}

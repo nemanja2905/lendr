@@ -72,7 +72,7 @@ export default function NextPanel(props) {
                     display: 'flex',
                     justifyContent: 'flex-end',
                     flexDirection: 'row',
-                    marginRight: 12,
+                    marginRight: 15,
                 }}
             >
                 <Text style={{ fontSize: fonts.REGULAR, marginRight: 5 }}>
@@ -89,18 +89,21 @@ const styles = StyleSheet.create({
         marginHorizontal: 15,
     },
     types: {
-        marginVertical: 10,
+        marginVertical: 5,
         paddingBottom: 5,
+        marginLeft: 10,
     },
-    list: {},
+    list: { marginVertical: 5 },
     title: {
-        fontSize: fonts.MEDIUM,
+        fontSize: fonts.MEDIUM - 1,
         fontWeight: 'bold',
     },
     container: {
         marginVertical: 10,
         borderRadius: 5,
         backgroundColor: 'white',
-        paddingHorizontal: 10,
+        // paddingHorizontal: 10,
+        paddingTop: 5,
+        // paddingBottom: 5,
     },
 });

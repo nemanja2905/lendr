@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     divider: {
-        marginVertical: 15,
+        marginVertical: 10,
         marginHorizontal: 15,
         borderTopColor: '#d0d0d0',
         borderTopWidth: 1,

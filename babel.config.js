@@ -16,6 +16,7 @@ module.exports = function (api) {
                         '@Colors': './src/constants/Colors.js',
                         '@Fonts': './src/constants/Fonts.js',
                         '@Config': './src/constants/Config.js',
+                        '@UserContext': './src/context/user',
                     },
                 },
             ],

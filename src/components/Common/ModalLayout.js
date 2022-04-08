@@ -63,6 +63,15 @@ export const ModalLayout = (props) => {
         </Modal>
     );
 };
+export const DefaultModal = (props) => {
+    const { children } = props;
+    const { opened = false, onClose = () => {} } = modalInfo;
+    return (
+        <ModalLayout isModalVisible={opened} onClose={onClose} position="top">
+            <View>{children}</View>
+        </ModalLayout>
+    );
+};
 export const ConfirmModal = (props) => {
     const { modalInfo, setModalInfo } = props;
     const {

@@ -17,7 +17,7 @@ export default function FormLink(props) {
             <View style={{ ...styles.freeContainer, ...style }}>
                 <TouchableOpacity
                     style={{ display: 'flex', flexDirection: 'row' }}
-                    onPress={props.onClick}
+                    onPress={props.onClick ? props.onClick : () => {}}
                 >
                     {/* <Icon name={icon} size={20} color="black" /> */}
                     <AssetIcon name={props.startIcon} />

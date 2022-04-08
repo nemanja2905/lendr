@@ -8,11 +8,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Avatar, Badge, withBadge } from 'react-native-elements';
 import { colors } from '@Colors';
 import { fonts } from '@Fonts';
+import AccountBalanceDialog from '../MyAccount/AccountBalanceDialog';
 
 function HeaderRight2(props) {
-    const { route } = props;
+    const { route, userInfo } = props;
+    // console.log('HeaderRight2 props=', props);
     const { name, key, params } = route;
     const [modalVisible, setModalVisible] = useState(false);
+    const [showBalance, setShowBalance] = useState(false);
     const navigation = useContext(NavigationContext);
 
     return (
@@ -49,13 +52,7 @@ function HeaderRight2(props) {
                     />
                 </View>
                 <View>
-                    <TouchableOpacity
-                        onPress={() =>
-                            navigation.navigate('MyAccount', {
-                                screen: 'navmenu',
-                            })
-                        }
-                    >
+                    <TouchableOpacity onPress={() => setShowBalance(true)}>
                         <View
                             style={{
                                 display: 'flex',
@@ -91,13 +88,7 @@ function HeaderRight2(props) {
                     </TouchableOpacity>
                 </View>
                 <View>
-                    <TouchableOpacity
-                        onPress={() =>
-                            navigation.navigate('MyAccount', {
-                                screen: 'index',
-                            })
-                        }
-                    >
+                    <TouchableOpacity>
                         <View
                             style={{
                                 display: 'flex',
@@ -169,8 +160,20 @@ function HeaderRight2(props) {
                     </TouchableOpacity>
                 </View>
             </View>
-
             <Login visible={modalVisible} onClick={setModalVisible} />
+            <AccountBalanceDialog
+                opened={showBalance}
+                handleClose={() => setShowBalance(false)}
+                userInfo={{ ...userInfo }}
+                navigate={() =>
+                    navigation.navigate('MyAccount', {
+                        screen: 'index',
+                        params: {
+                            userInfo,
+                        },
+                    })
+                }
+            />
             {/* {modalVisible && (
             )} */}
         </>

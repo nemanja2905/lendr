@@ -14,9 +14,12 @@ import AccountBenefitsRewards from '../../components/MyAccount/AccountBenefitsRe
 import AccountVerification from '../../components/MyAccount/AccountVerification';
 import AccountGambling from '../../components/MyAccount/AccountGambling';
 import AccountForotPassword from '../../components/MyAccount/AccountForgotPassword';
-import AccountNavigationMenu from '../../components/MyAccount/AccountNavigationMenu';
+
 import GamblingDepositLimit from '../../components/MyAccount/GamblingDepositLimit';
 import GamblingSelfExclude from '../../components/MyAccount/GamblingSelfExclude';
+import HeaderLeft from '../../components/shared/HeaderLeft';
+import HeaderRight from '../../components/shared/HeaderRight';
+import HeaderRight2 from '../../components/shared/HeaderRight2';
 const Stack = createStackNavigator();
 
 function Index() {
@@ -27,23 +30,51 @@ export default function MyAccountStack() {
         <Stack.Navigator
             screenOptions={({ route }) => {
                 return {
-                    // header: () => <SubHeader />,
-                    // // component: () => (
-                    // //     <View>
-                    // //         <Text>A</Text>
-                    // //     </View>
-                    // // ),
-                    // headerShown: true,
-                    // cardOverlayEnabled: true,
-                    // cardStyle: {
-                    //     backgroundColor: 'white',
-                    //     transform: [{ translateY: -30 }],
-                    // },
-                    headerShown: false,
+                    tabBarIcon: ({ focused, color, size }) => {
+                        let iconname;
+
+                        if (route.name === 'Home') {
+                            iconname = focused ? 'home' : 'home';
+                        } else if (route.name === 'Root-Sports') {
+                            iconname = focused ? 'sports' : 'sports';
+                        } else if (route.name === 'Root-More') {
+                            iconname = focused ? 'menu' : 'menu';
+                            return (
+                                <CustomIcon
+                                    name={iconname}
+                                    size={size - 4}
+                                    color={color}
+                                />
+                            );
+                        } else if (route.name == 'Root-Notifications') {
+                            iconname = focused ? 'alarm' : 'alarm';
+                        } else if (route.name == 'Root-Racing') {
+                            iconname = focused ? 'horse' : 'horse';
+                        }
+
+                        return (
+                            <CustomIcon
+                                name={iconname}
+                                size={size}
+                                color={color}
+                            />
+                        );
+                    },
+                    tabBarActiveTintColor: colors.primary.main,
+                    tabBarInactiveTintColor: 'gray',
+                    headerStyle: {
+                        backgroundColor: config.header.headerColor,
+                    },
+                    //header: (navigation, route, back) => <Header back={back} />, // if you want to add a custom Header
+                    headerTintColor: 'white',
+                    headerLeft: () => <HeaderLeft route={route} />,
+                    headerRight: () => <HeaderRight2 route={route} />,
+
+                    headerTitle: '',
                 };
             }}
         >
-            <Stack.Screen name="index" component={Index} />
+            <Stack.Screen name="index" component={AccountNavigation} />
             <Stack.Screen name="navigation" component={AccountNavigation} />
             <Stack.Screen
                 name="mydetails"
@@ -68,7 +99,6 @@ export default function MyAccountStack() {
                 name="depositlimit"
                 component={GamblingDepositLimit}
             />
-            <Stack.Screen name="navmenu" component={AccountNavigationMenu} />
         </Stack.Navigator>
     );
 }

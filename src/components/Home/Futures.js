@@ -10,30 +10,32 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const Futures = (props) => {
     const title = 'Popular Sports';
     return (
-        <View style={styles.wrapper}>
-            <Text style={styles.title}>{title}</Text>
-            <View style={styles.container}>
-                <ScrollView horizontal={true}>
-                    {featureDetails.map((data, idx) => (
-                        <FutureCard data={data} />
-                    ))}
-                </ScrollView>
+        <>
+            <View style={styles.wrapper}>
+                <Text style={styles.title}>{title}</Text>
             </View>
-            <TouchableOpacity
-                onPress={() => alert('More')}
-                style={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    flexDirection: 'row',
-                    marginRight: 12,
-                }}
-            >
-                <Text style={{ fontSize: fonts.REGULAR, marginRight: 5 }}>
-                    View More
-                </Text>
-                <Icon name="angle-right" size={14} />
-            </TouchableOpacity>
-        </View>
+            <ScrollView style={styles.types2} horizontal={true}>
+                {featureDetails.map((data, idx) => (
+                    <FutureCard key={idx} data={data} />
+                ))}
+            </ScrollView>
+            <View style={styles.wrapper}>
+                <TouchableOpacity
+                    onPress={() => alert('More')}
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Text style={{ fontSize: fonts.REGULAR, marginRight: 5 }}>
+                        View More
+                    </Text>
+                    <Icon name="angle-right" size={14} />
+                </TouchableOpacity>
+            </View>
+        </>
     );
 };
 const FutureCard = ({ data }) => {
@@ -81,8 +83,10 @@ const styles = StyleSheet.create({
     wrapper: {
         marginHorizontal: 15,
     },
-    types: {
-        marginVertical: 10,
+
+    types2: {
+        marginVertical: 7,
+        marginLeft: 15,
     },
     img: {
         width: 20,
@@ -92,6 +96,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: fonts.MEDIUM,
         fontWeight: 'bold',
+        marginVertical: 2,
     },
     linear: {
         display: 'flex',
@@ -99,10 +104,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     container: {
-        marginVertical: 10,
+        marginVertical: 5,
         borderRadius: 5,
         // backgroundColor: 'white',
-        paddingHorizontal: 10,
+        paddingHorizontal: 0,
     },
     card: {
         borderRadius: 5,

@@ -18,12 +18,12 @@ export default function CategoryButtonGroup(props) {
             <View style={styles.container}>
                 <CustomButton
                     icon="HORSES"
-                    label="Racing"
+                    label=" Racing"
                     isAsset={true}
                     style={{
                         height: 24,
                         marginHorizontal: 5,
-                        minWidth: '45%',
+                        minWidth: '47%',
                         width: 'auto',
                         borderRadius: 12,
                         elevation: 0,
@@ -47,13 +47,13 @@ export default function CategoryButtonGroup(props) {
                 />
                 <CustomButton
                     icon="SOCC"
+                    iconSize={24}
                     label="Sports"
                     isAsset={true}
                     style={{
                         height: 24,
                         marginHorizontal: 5,
-                        marginHorizontal: 5,
-                        minWidth: '45%',
+                        minWidth: '47%',
                         width: 'auto',
                         backgroundColor: '#e0e0e0',
                         borderRadius: 12,
@@ -84,11 +84,11 @@ export default function CategoryButtonGroup(props) {
 const styles = StyleSheet.create({
     container: {
         marginVertical: 10,
-        marginHorizontal: '10%',
+        marginHorizontal: '5%',
         width: 'auto',
         backgroundColor: '#e0e0e0',
         height: 32,
-        borderRadius: 20,
+        borderRadius: 24,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',

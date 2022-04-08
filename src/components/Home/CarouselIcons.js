@@ -12,7 +12,7 @@ import { sportTypes, raceTypes } from './constData';
 import { AssetIcon, getImage, SvgIcon } from '../Icon/Icon';
 
 const UniIconLabel = (props) => {
-    const { label, icon } = props;
+    const { label, icon, type = 1 } = props;
     return (
         <View
             style={{
@@ -24,16 +24,18 @@ const UniIconLabel = (props) => {
         >
             <View style={styles.icon}>
                 {/* <AssetIcon name={icon} /> */}
-                <SvgIcon name={icon} />
+                <SvgIcon name={icon} size={type === 2 ? 20 : 30} />
                 {/* <Image source={require('../../../assets/svg/icon-JCKY.svg')} /> */}
             </View>
             <View
                 style={{
-                    width: 60,
+                    width: 50,
                     height: 40,
                 }}
             >
-                <Text style={{ textAlign: 'center', fontSize: fonts.REGULAR }}>
+                <Text
+                    style={{ textAlign: 'center', fontSize: fonts.REGULAR - 2 }}
+                >
                     {label}
                 </Text>
             </View>
@@ -68,7 +70,7 @@ export default function CarouselIcons(props) {
             <View style={styles.wrapper}>
                 <ScrollView style={styles.container} horizontal={true}>
                     {raceTypes.map((data, idx) => (
-                        <UniIconLabel {...data} key={idx} />
+                        <UniIconLabel {...data} key={idx} type={2} />
                     ))}
                 </ScrollView>
             </View>
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
         height: 40,
         borderRadius: 20,
         elevation: 3,
-        marginHorizontal: 10,
+        marginHorizontal: 6,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

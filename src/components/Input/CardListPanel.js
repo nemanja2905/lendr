@@ -27,24 +27,26 @@ export default function CardListPanel(props) {
         setCards(cards.map((card) => (card.ccid === c.ccid ? c : card)));
     };
 
-    const doCreditCardUnregister = useCallback(async (clientid, cardid) => {
-        const res = await proceedCreditCardUnregister(clientid, cardid);
-        if (res.CCUnregister && res.CCUnregister.success) {
-            // console.log('doCreditCardUnregister=', 200);
-            setResult({ status: 200, msg: 'Unregistered Successfully.' });
-        } else if (res.ERROBJ && res.ERROBJ.ERROR == 0) {
-            // console.log('doCreditCardUnregister=', 201);
-            setResult({ status: 200, msg: 'Unregistered Successfully.' });
-        } else {
-            // console.log('doCreditCardUnregister=', 404);
-            setResult({
-                status: 404,
-                msg: (res.ERROBJ && res.ERROBJ.ERRORDESC) || 'Unknown error.',
-            });
-            return false;
-        }
-        return true;
-    }, []);
+    const doCreditCardUnregister = useCallback(
+        async (clientid, cardid) => {
+            const res = await proceedCreditCardUnregister({ clientid, cardid });
+            if (res.CCUnregister && res.CCUnregister.success) {
+                setResult({ status: 200, msg: 'Unregistered Successfully.' });
+            } else if (res.ERROBJ && res.ERROBJ.ERROR == 0) {
+                setResult({ status: 200, msg: 'Unregistered Successfully.' });
+            } else {
+                setResult({
+                    status: 404,
+                    msg:
+                        (res.ERROBJ && res.ERROBJ.ERRORDESC) ||
+                        'Unknown error.',
+                });
+                return false;
+            }
+            return true;
+        },
+        [clientid]
+    );
 
     //just remove in this app,  remains in server
     // const removeCard = (index) => {
@@ -52,7 +54,7 @@ export default function CardListPanel(props) {
     // };
 
     const removeCardById = (id) => {
-        if (doCreditCardUnregister(clientid, id) === true) {
+        if (doCreditCardUnregister(clientid, id)) {
             // if(doReloadCreditCards){
             //   doReloadCreditCards();
             // }else
@@ -61,6 +63,17 @@ export default function CardListPanel(props) {
             }
         }
     };
+    useEffect(() => {
+        const fetcha = () => {
+            if (result) {
+                setResult({});
+            }
+        };
+
+        const tt = setTimeout(fetcha, 5000);
+        return () => clearTimeout(tt);
+    }, [result]);
+
     return (
         <View
             style={{

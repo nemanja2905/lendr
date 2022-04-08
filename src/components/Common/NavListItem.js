@@ -12,7 +12,7 @@ import { AssetIcon } from '../Icon/Icon';
 // import SvgUri from 'react-native-svg-uri';
 
 export default function NavListItem(props) {
-    const { icon, label, name } = props;
+    const { icon, label, name, userInfo } = props;
     const navigation = useContext(NavigationContext);
     return (
         <View style={styles.container}>
@@ -20,6 +20,9 @@ export default function NavListItem(props) {
                 onPress={() =>
                     navigation.navigate('MyAccount', {
                         screen: `${name}`,
+                        params: {
+                            userInfo,
+                        },
                     })
                 }
                 style={styles.wrapper}

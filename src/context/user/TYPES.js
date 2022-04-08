@@ -1,0 +1,6 @@
+export const USER_TYPE = {
+    LOGIN: 'LOGIN',
+    LOGOUT: 'LOGOUT',
+    UPDATE_USER: 'UPDATE_USER',
+    UPDATE_USER_DETAIL: 'UPDATE_USER_DETAIL',
+};

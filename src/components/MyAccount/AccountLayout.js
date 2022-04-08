@@ -3,6 +3,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import SubHeader from '../Common/SubHeader';
 import { fonts } from '@Fonts';
 import { ScrollView } from 'react-native-gesture-handler';
+
 export default function AccountLayout(props) {
     const { children, title } = props;
 
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
     container2: {
         // backgroundColor: 'white',
         position: 'relative',
-        top: -70,
+        top: -75,
         height: 'auto',
         backgroundColor: 'white',
         borderRadius: 10,

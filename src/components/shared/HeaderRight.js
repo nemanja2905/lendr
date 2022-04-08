@@ -34,7 +34,7 @@ function HeaderRight(props) {
         <>
             <View style={styles.container}>
                 <View style={{ justifyContent: 'center' }}>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         style={styles.btn}
                         onPress={() =>
                             navigation.navigate('MyAccount', {
@@ -43,7 +43,7 @@ function HeaderRight(props) {
                         }
                     >
                         <Text>MyAccount</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
                 <View style={{ justifyContent: 'center' }}>
                     <TouchableOpacity

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import AccountLayout from './AccountLayout';
 
@@ -13,8 +13,40 @@ import { VALIDATE2, VALIDATE3 } from '../../util/Validators2';
 import { useCallback } from 'react';
 import FormLink from '../Input/Link';
 import { proceedUserChangePass } from '../../util/authAPI';
+import { UserContext } from '../../context/user/UserProvider';
 
 export default function AccountChangePassword(props) {
+    const { route } = props;
+    const { name, path, key, params } = route;
+    // const { userInfo } = params; //alternative
+    const { user } = useContext(UserContext); //UserContext doesn't work correctly...
+
+    const initValue = {
+        clientid: 'testclient',
+        loginID: 'testclient',
+        password: '',
+        newPassword: '',
+        confirmNewPassword: '',
+    };
+    // useEffect(() => {
+    //     if (userInfo) {
+    //         setFormInput({
+    //             ...formInput,
+    //             clientid: userInfo.CLIENTID,
+    //             loginID: userInfo.CLIENTID,
+    //         });
+    //     }
+    // }, [userInfo]);
+    useEffect(() => {
+        if (user && user.user) {
+            setFormInput({
+                ...formInput,
+                clientid: user.user.CLIENTID,
+                loginID: user.user.CLIENTID,
+            });
+        }
+    }, []);
+
     const [errors, setErrors] = useState({
         password: null,
         newPassword: null,
@@ -26,16 +58,12 @@ export default function AccountChangePassword(props) {
         passed3: false,
     });
 
-    const currentPassword = 'asd123';
+    // const currentPassword = 'asd123'; //fake, no need to set correctly...
     const [result, setResult] = useState({
-        status: 403,
-        msg: 'Network error',
+        // status: 403,
+        // msg: 'Network error',
     });
-    const [formInput, setFormInput] = useState({
-        clientid: 'testclient',
-        loginID: 'testclient',
-        password: currentPassword,
-    });
+    const [formInput, setFormInput] = useState(initValue);
 
     const handleChange = (value, namen) => {
         if (namen === 'newPassword') {
@@ -53,29 +81,18 @@ export default function AccountChangePassword(props) {
         });
     };
 
-    const handleValidate = (namen) => {
-        const _error = VALIDATE2(formInput, currentPassword);
+    const handleValidate = (e) => {
+        const _error = VALIDATE2(formInput, initValue.password);
+        console.log('ChangePasswordForm Error', _error);
         setErrors({ ..._error });
     };
 
-    const handleChangePassword = () => {
-        doChangePassword(formInput);
+    const handleSave = () => {
+        doSave(formInput);
     };
     //call API to change password
-    const doChangePassword = useCallback(async (value2) => {
+    const doSave = useCallback(async (value2) => {
         const _result = (await proceedUserChangePass(value2)) || {};
-        //I skipped this, because calling api results error,
-        //It seems that you'are upgrading API...
-        //suppose API success
-        // alert(value2.newPassword);
-        // const _result = {
-        //     ERROBJ: {
-        //         ERRORCODE: 0,
-        //         ERRORDESC: 'ERRORDESC',
-        //     },
-        //     status: 200,
-        //     msg: 'Your Password has been updated.',
-        // };
 
         if (_result) {
             if (_result.error) {
@@ -96,7 +113,7 @@ export default function AccountChangePassword(props) {
         } else {
             setResult({ status: 403, msg: 'Network error' });
         }
-    }, []);
+    });
 
     useEffect(() => {
         const fetcha = () => {
@@ -105,7 +122,7 @@ export default function AccountChangePassword(props) {
             }
         };
 
-        const tt = setTimeout(fetcha, 3000);
+        const tt = setTimeout(fetcha, 5000);
         return () => clearTimeout(tt);
     }, [result]);
 
@@ -163,22 +180,22 @@ export default function AccountChangePassword(props) {
                     <PasswordField
                         placeholder="Confirm Password..."
                         label="Confirm Password:"
-                        errors={errors.confirmPassword}
-                        value={formInput.confirmPassword}
-                        onChange={(v) => handleChange(v, 'confirmPassword')}
-                        onBlur={() => handleValidate('confirmPassword')}
+                        errors={errors.confirmNewPassword}
+                        value={formInput.confirmNewPassword}
+                        onChange={(v) => handleChange(v, 'confirmNewPassword')}
+                        onBlur={() => handleValidate('confirmNewPassword')}
                     />
                 </View>
 
-                <View style={{ ...styles.formControlGroup, paddingTop: 24 }}>
+                <View style={{ ...styles.formControlGroup, marginTop: 24 }}>
                     <Button
                         value="Change Password"
                         disabled={
                             errors.newPassword ||
-                            errors.confirmPassword ||
+                            errors.confirmNewPassword ||
                             errors.password
                         }
-                        onClick={handleChangePassword}
+                        onClick={handleSave}
                     />
                 </View>
                 <View style={{ ...styles.formControlGroup, paddingBottom: 0 }}>

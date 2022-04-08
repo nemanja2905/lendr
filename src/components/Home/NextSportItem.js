@@ -32,7 +32,7 @@ const NewCountdown = ({ time }) => {
             <Text
                 style={{
                     color: timeUrgent ? colors.error.main : 'black',
-                    fontSize: fonts.REGULAR,
+                    fontSize: fonts.REGULAR - 1,
                 }}
             >
                 {timeString}
@@ -43,20 +43,8 @@ const NewCountdown = ({ time }) => {
 export default function NextSportItem(props) {
     const { data } = props;
 
-    // console.log('NextSportItem data=', data);
-    // // return <Text>{data.tan}</Text>;
-    // let local_date = moment
-    //     .utc(Date.now() + 1000 * data.mjs)
-    //     .local()
-    //     .format();
-    // let local_time = moment
-    //     .utc(Date.now() + 1000 * data.mjs)
-    //     .local()
-    //     .format('HH:mm');
-
     let idx;
-    // //
-    // // console.log("local_date", local_date, "local_time", local_time);
+
     const [time, setTimer] = useState(0);
 
     useEffect(() => {
@@ -80,7 +68,9 @@ export default function NextSportItem(props) {
     return (
         <View style={styles.between}>
             <View style={styles.linear}>
-                <SvgIcon name={data.sc} size={30} />
+                <View style={{ width: 40 }}>
+                    <SvgIcon name={data.sc} size={32} />
+                </View>
                 <View>
                     <View style={styles.linear}>
                         <Text style={styles.text}>{data.tan}</Text>
@@ -95,13 +85,12 @@ export default function NextSportItem(props) {
             <View
                 style={{
                     ...styles.linear,
-                    width: 50,
-                    justifyContent: 'space-between',
+                    justifyContent: 'flex-end',
                     alignItems: 'center',
                 }}
             >
                 <NewCountdown time={time} />
-                <Icon name="angle-right" size={20} />
+                <Icon name="angle-right" size={14} style={{ marginLeft: 10 }} />
             </View>
             {/*  */}
         </View>
@@ -113,12 +102,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginLeft: -5,
     },
     linear: {
         display: 'flex',
         flexDirection: 'row',
+        alignItems: 'flex-start',
     },
     text: {
-        fontSize: fonts.REGULAR,
+        fontSize: fonts.REGULAR - 1,
     },
 });

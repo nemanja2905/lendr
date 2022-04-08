@@ -20,14 +20,14 @@ export default function PromotionCategory(props) {
                     iconVisible={false}
                     value={'ALL'}
                     style={{
-                        height: 25,
+                        height: 28,
                         marginHorizontal: 5,
                         marginBottom: 5,
                         borderRadius: 15,
                         backgroundColor: '#e0e0e0',
                     }}
                     textStyle={{
-                        fontSize: fonts.REGULAR,
+                        fontSize: fonts.REGULAR - 1,
                     }}
                     onClick={() => setFilter('ALL')}
                     isSelected={filter === 'ALL'}
@@ -42,14 +42,14 @@ export default function PromotionCategory(props) {
                         icon={type.sc}
                         value={type.sc}
                         style={{
-                            height: 25,
+                            height: 28,
                             marginHorizontal: 5,
                             borderRadius: 15,
                             marginBottom: 5,
                             backgroundColor: '#e0e0e0',
                         }}
                         textStyle={{
-                            fontSize: fonts.REGULAR,
+                            fontSize: fonts.REGULAR - 1,
                         }}
                         onClick={() => setFilter(type.sc)}
                         isSelected={filter === type.sc}

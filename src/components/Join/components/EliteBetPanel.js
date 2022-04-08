@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 
 // Constant imports
 import { colors } from '@Colors';
@@ -11,36 +11,40 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
 import { fetchUserBenefits } from '../../../util/authAPI';
 import Button, { Button2 } from '../../Input/Button';
+import { UserContext } from '../../../context/user/UserProvider';
 
 export default function EliteBetPanel(props) {
-    const { balance, reward, updateData } = props;
+    const { balance, reward, updateData, clientid } = props;
     const [selected, setSelected] = useState(0);
-    // const [points, setPoints] = useState('');
+
     const [message, setMessage] = useState(null);
-    // const limitPoint = 3000;
+
     const [formInput, setFormInput] = useState({
         points: null,
         limitPoint: null,
     });
+
     const urls = [
         `https://devapi.racingtipoff.com/user/pointsredeem`,
         `https://devapi.racingtipoff.com/user/pointsautoredeem`,
     ];
-
+    let interval = 0;
     useEffect(() => {
-        const interval = setInterval(() => {
+        interval = setInterval(() => {
             if (message !== null) {
                 setMessage(null);
                 updateData();
             }
-        }, 3000);
+        }, 5000);
         return () => clearInterval(interval);
     }, [message]);
 
     const updateData2 = async (selected, _points) => {
-        // console.log('BenReedemBody updateData2', selected, _points);
-        const data3 = (await fetchUserBenefits(urls[selected], _points)) || {};
-        // console.log('setMessage', data3);
+        const data3 = await fetchUserBenefits(selected, {
+            clientid: clientid,
+            points: _points,
+        });
+        console.log('setMessage', data3);
         setMessage(data3);
     };
 

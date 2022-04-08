@@ -72,6 +72,7 @@ export default function Slider(props) {
             <View style={styles.dots}>
                 {[...Array(maxSteps)].map((obj, idx) => (
                     <TouchableOpacity
+                        key={idx + 400}
                         onPress={() => handleStepChange(idx)}
                         style={styles.dot}
                     >

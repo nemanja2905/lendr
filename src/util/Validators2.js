@@ -1,6 +1,7 @@
 // Provides utility functions to Register Component
 
 import moment from 'moment';
+import { config } from '@Config';
 // returns the current year
 const CURRENT_YEAR = moment().year() - 18;
 
@@ -102,10 +103,10 @@ export const VALIDATE4 = async (values) => {
             mobileReg.test(values.address) ||
             mobileRegOT.test(values.address)
         ) {
-            const url2 = `https://elitebetstage.racingtipoff.com/user/checkmobile`;
+            const url2 = `${config.domain}/user/checkmobile`;
             try {
                 const response = await fetch(
-                    `https://elitebetstage.racingtipoff.com/user/checkmobile`,
+                    `${config.domain}/user/checkmobile`,
                     {
                         method: 'POST',
                         mode: 'cors',
@@ -153,9 +154,10 @@ export const VALIDATE2 = (values, currentPassword) => {
 
     if (!values.password) {
         errors.password = 'Password is required';
-    } else if (values.password !== currentPassword) {
-        errors.password = 'Password mismatch.';
-    } // errors.password = "Password requires at least one numeric, one capital and one lowercase.";
+    }
+    // else if (values.password !== currentPassword) {
+    //     errors.password = 'Password mismatch.';
+    // } // errors.password = "Password requires at least one numeric, one capital and one lowercase.";
     // errors.password = values.password;
 
     if (!values.newPassword) {
@@ -178,16 +180,15 @@ export const VALIDATE2 = (values, currentPassword) => {
         // errors.passed2 = passwordRegex3.test(values.newPassword);
     }
 
-    if (!values.confirmPassword) {
-        // errors.confirmPassword = "Confirm Password is required";
-        errors.confirmPassword = 'Confirm password mismatch.';
-    } else if (values.newPassword !== values.confirmPassword) {
-        errors.confirmPassword = 'Confirm password mismatch.';
+    if (!values.confirmNewPassword) {
+        // errors.confirmPassword = "";
+        errors.confirmNewPassword = 'Confirm Password is required.';
+    } else if (values.newPassword !== values.confirmNewPassword) {
+        errors.confirmNewPassword = 'Confirm password mismatch.';
     }
 
     return errors;
 };
-
 const client = process.env.NEXT_PUBLIC_CLIENT;
 
 // Gen web regex, taken directly from their documentation
@@ -198,7 +199,6 @@ const GW_P_Min_Regex = /^[a-zA-Z0-9]{6,}$/; // minimum 6 characters
 const GW_P_Num_Regex = /[0-9]/; // Must contain atleast one number
 const GW_P_OAplha_Regex = /[a-zA-Z]/; // must contain atleast one alphabetic character
 const GW_P_Regex = /^((?=.*[0-9])(?=.*[a-zA-Z]).{6,})$/; // password generic
-
 // validation for all the fields
 export const VALIDATE = async (
     values,
@@ -214,16 +214,9 @@ export const VALIDATE = async (
 ) => {
     const errors = {};
 
-    if (!values.APTNO || values.APTNO === '0') {
-        errors.APTNO = 'Apartment No should never be 0.';
-    }
-    if (!values.STNUMBER || values.STNUMBER === '0') {
-        errors.STNUMBER = 'Street Number should never be 0.';
-    }
     if (client == 'gto') {
         // gto validation
         // validation checks for loginID
-
         if (!values.loginID) {
             errors.loginID = 'Username is required';
         } else if (values.loginID.length < 6) {
@@ -233,7 +226,7 @@ export const VALIDATE = async (
         } else if (!checkPunctuation.test(values.loginID)) {
             errors.loginID = 'Can only contain letters and numbers';
         } else if (checkSpaces.test(values.loginID)) {
-            errors.loginID = 'Username cannot contain spaces';
+            errors.loginID = 'Username cannot cotnain spaces';
         }
 
         // validation for password
@@ -245,17 +238,12 @@ export const VALIDATE = async (
                 'Password too short. Password must contain at least 8 characters.';
         } else if (checkSpaces.test(values.password)) {
             errors.password = 'Password cannot contain spaces';
-            errors.passed3 = true;
         } else if (!passwordRegex.test(values.password)) {
             errors.password =
                 'Password requires at least one numeric, one capital and one lowercase.';
-            errors.passed3 = true;
-        } else {
-            errors.passed1 = true;
-            errors.passed2 = true;
-            errors.passed3 = true;
         }
     } else {
+        console.log('VALIDATE values=', values);
         // Gen web validations
         // validation for login
         if (!values.loginID) {
@@ -279,23 +267,17 @@ export const VALIDATE = async (
         } else if (!GW_P_Min_Regex.test(values.password)) {
             errors.password =
                 'Password cannot contain special characters. Alphanumeric only.';
-            errors.check3 = true;
         } else if (!GW_P_Apla_Regex.test(values.password)) {
             errors.password =
                 'Password can only contain alphanumeric characters only';
-            errors.check3 = true;
         } else if (!GW_P_Num_Regex.test(values.password)) {
             errors.password =
                 'Password requires at least one numeric character';
-            errors.check3 = true;
         } else if (!GW_P_OAplha_Regex.test(values.password)) {
             errors.password =
                 'Password requires at least one alphabetic character';
-            errors.check3 = true;
-            errors.check2 = true;
         } else if (!GW_P_Regex.test(values.password)) {
             errors.password = 'Password invalid.';
-            errors.check3 = true;
         }
     }
 
@@ -307,19 +289,16 @@ export const VALIDATE = async (
         // call the API to validate loginID
         console.log('in the api', values.loginID);
         try {
-            const response = await fetch(
-                `https://elitebetstage.racingtipoff.com/user/checkloginid`,
-                {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                        XAPIGTO: 'EB',
-                    },
-                    body: JSON.stringify({ loginid: values.loginID }),
-                }
-            );
+            const response = await fetch(`${config.domain}/user/checkloginid`, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    XAPIGTO: 'EB',
+                },
+                body: JSON.stringify({ loginid: values.loginID }),
+            });
 
             const isLoginValid = await response.json();
             if (+isLoginValid === 1) {
@@ -338,13 +317,12 @@ export const VALIDATE = async (
     // validation checks for firstName
     if (!values.firstname) {
         errors.firstname = 'Please enter your First name';
-    } else if (values.firstname.length < 3) {
+    } else if (values.firstname.length < 1) {
+        errors.firstname = 'Please enter your First name. At least 1 character';
+    } else if (!/^[a-zA-Z][a-zA-Z \'-]*$/.test(values.firstname)) {
         errors.firstname =
-            'Please enter your First name. At least 3 characters';
+            'First name must start with a letter. Only letters, spaces & hyphens permitted.';
     }
-    // else if (!validWord.test(values.firstname)) {
-    // 	errors.firstname = "First name invalid. No punctuation or numeric characters.";
-    // }
     // else if (!checkPunctuation.test(values.firstname)) {
     // 	errors.firstname = "First name invalid. No punctuation characters.";
     // }
@@ -360,11 +338,15 @@ export const VALIDATE = async (
     if (!values.surname) {
         // validation checks for surname
         errors.surname = 'Please enter your surname';
-    } else if (values.surname.length < 3) {
-        errors.surname = 'Please enter your surname. At least 3 characters';
+    } else if (values.surname.length < 1) {
+        errors.surname = 'Please enter your surname. At least 1 character';
+    } else if (!/^[a-zA-Z][a-zA-Z \'-]*$/.test(values.surname)) {
+        errors.surname =
+            'Surname must start with a letter. Only letters, spaces & hyphens permitted.';
     }
-    // else if (!validWord.test(values.surname)) {
-    // 	errors.surname = "Surname invalid. No punctuation or numeric characters.";
+    //      else if (!validWord.test(values.surname)) {
+    //     errors.surname =
+    //         'Surname invalid. No punctuation or numeric characters.';
     // }
     // else if (!checkPunctuation.test(values.surname)) {
     // 	errors.surname = "Surname invalid. No punctuation characters.";
@@ -416,37 +398,33 @@ export const VALIDATE = async (
         errors.email = 'Please enter a valid email';
     } else if (values.email !== validEmail) {
         // call the API to validate email
-        // try {
-        //     const url2 = `https://elitebetstage.racingtipoff.com/user/checkEmail`;
-        //     //52.62.199.40
-        //     console.log('register.util.js url2', url2);
-        //     const response = await fetch(
-        //         `https://52.62.199.40/user/checkEmail`,
-        //         {
-        //             method: 'POST',
-        //             mode: 'cors',
-        //             headers: {
-        //                 Accept: 'application/json',
-        //                 'Content-Type': 'application/json',
-        //                 XAPIGTO: 'EB',
-        //             },
-        //             body: JSON.stringify({ email: values.email }),
-        //         }
-        //     );
-        //     const isEmailValid = await response.json();
-        //     if (+isEmailValid !== 0) {
-        //         // error, email already exists
-        //         errors.email =
-        //             'Email address already exists. Enter a different email address.';
-        //     } else {
-        //         setValidEmail(values.email);
-        //     }
-        //     console.log(isEmailValid);
-        // } catch (e) {
-        //     errors.email =
-        //         'Unable to validate Email - Network Error, please try again later';
-        //     console.log('Unable to verify Email', e);
-        // }
+        try {
+            const response = await fetch(`${config.domain}/user/checkEmail`, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    XAPIGTO: 'EB',
+                },
+                body: JSON.stringify({ email: values.email }),
+            });
+
+            const isEmailValid = await response.json();
+            if (+isEmailValid !== 0) {
+                // error, email already exists
+                errors.email =
+                    'Email address already exists. Enter a different email address.';
+            } else {
+                setValidEmail(values.email);
+            }
+
+            console.log(isEmailValid);
+        } catch (e) {
+            errors.email =
+                'Unable to validate Email - Network Error, please try again later';
+            console.log('Unable to verify Email');
+        }
     }
 
     // validation for mobile number
@@ -464,37 +442,37 @@ export const VALIDATE = async (
         errors.mobile = 'Please enter a valid mobile';
     } else if (values.state !== 9 && !mobileReg.test(values.mobile)) {
         errors.mobile = 'Please enter a valid mobile';
-    } else if (values.mobile !== validMobile) {
+    } else if (client == 'gto' && values.mobile !== validMobile) {
         // call the API to validate Mobile
-        // try {
-        //     const response = await fetch(
-        //         `https://elitebetstage.racingtipoff.com/user/checkmobile`,
-        //         {
-        //             method: 'POST',
-        //             mode: 'cors',
-        //             headers: {
-        //                 Accept: 'application/json',
-        //                 'Content-Type': 'application/json',
-        //                 XAPIGTO: 'EB',
-        //             },
-        //             body: JSON.stringify({ mobile: values.mobile }),
-        //         }
-        //     );
-        //     const isMobileValid = await response.json();
-        //     console.log(isMobileValid);
-        //     if (!isMobileValid.SUCCESS) {
-        //         // error, email already exists
-        //         errors.mobile =
-        //             'Mobile already exists. Enter a different mobile.';
-        //     } else {
-        //         setValidMobile(values.mobile);
-        //     }
-        //     console.log(isMobileValid);
-        // } catch (e) {
-        //     errors.mobile =
-        //         'Unable to validate Mobile - Network Error, please try again later';
-        //     console.log('Unable to verify Mobile');
-        // }
+
+        try {
+            const response = await fetch(`${config.domain}/user/checkmobile`, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    XAPIGTO: 'EB',
+                },
+                body: JSON.stringify({ mobile: values.mobile }),
+            });
+
+            const isMobileValid = await response.json();
+            console.log(isMobileValid);
+            if (!isMobileValid.SUCCESS) {
+                // error, email already exists
+                errors.mobile =
+                    'Mobile already exists. Enter a different mobile.';
+            } else {
+                setValidMobile(values.mobile);
+            }
+
+            console.log(isMobileValid);
+        } catch (e) {
+            errors.mobile =
+                'Unable to validate Mobile - Network Error, please try again later';
+            console.log('Unable to verify Mobile');
+        }
     }
 
     if (client == 'gto' || client == 'eb') {
@@ -507,33 +485,22 @@ export const VALIDATE = async (
         if (!values.country || values.country === 0) {
             errors.country = 'Required';
         }
-    }
-    if (buyTips) {
-        // all the validation for appartment no, street no, street name and street type goes here
-        // validation for appartment number, not required
-        // if (!values.aptNo) {
-        // 	errors.aptNo = "Required";
-        // }
 
-        if (!values.stNo) {
-            errors.stNo = 'Required';
-        }
-
-        if (!values.stName) {
-            errors.stName = 'Required';
-        }
-
-        if (
-            values.yearDOB !== 0 &&
-            values.monthDOB !== 0 &&
-            values.dateDOB !== 0
-        ) {
-            // const date = new Date(YEARS[values.yearDOB - 1], values.monthDOB - 1, values.dateDOB);
-            // console.log(date);
-            // const age = moment().diff(date, "years");
-            // if (age < 18) {
-            // 	errors.yearDOB = "Users must be over 18";
+        if (buyTips) {
+            // all the validation for appartment no, street no, street name and street type goes here
+            // validation for appartment number, not required
+            // if (!values.aptNo) {
+            // 	errors.aptNo = "Required";
             // }
+
+            if (!values.stNo) {
+                errors.stNo = 'Required';
+            }
+
+            if (!values.stName) {
+                errors.stName = 'Required';
+            }
+
             // validation for Street Type
             if (!values.stType || values.stType === 0) {
                 errors.stType = 'Required';
@@ -549,17 +516,29 @@ export const VALIDATE = async (
 
         // validation for psotcode
         // && conidtion is required where country is AU
-        if (!values.postCode && values.country === 'Australia') {
-            errors.postCode = 'Postcode required';
+        if (!values.postcode && values.country === 'Australia') {
+            errors.postcode = 'Postcode required';
         } else if (
             values.state &&
             values.state !== 9 &&
-            values.postCode.length < 4
+            values.postcode.length < 4
         ) {
-            errors.postCode = 'Invalid postcode';
-        } else if (!isInteger.test(values.postCode)) {
-            errors.postCode = 'Invalid postcode.';
+            errors.postcode = 'Invalid postcode';
+        } else if (!isInteger.test(values.postcode)) {
+            errors.postcode = 'Invalid postcode.';
         }
+    }
+
+    if (values.depositLimit == null) {
+        errors.depositLimit = `Please select whether you'd like to set a deposit limit.`;
+    }
+
+    if (values.depositLimit && !isInteger.test(values.depositAmount)) {
+        errors.depositAmount = 'Numbers only';
+    }
+
+    if (values.depositLimit && values.depositPeriod == 0) {
+        errors.depositPeriod = 'Select period';
     }
 
     return errors;

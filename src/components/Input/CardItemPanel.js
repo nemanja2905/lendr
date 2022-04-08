@@ -72,7 +72,7 @@ const CardItemPanel = (props) => {
             }
         };
 
-        const tt = setTimeout(fetcha, 3000);
+        const tt = setTimeout(fetcha, 5000);
         return () => clearTimeout(tt);
     }, [result]);
 

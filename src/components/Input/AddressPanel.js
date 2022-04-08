@@ -46,10 +46,10 @@ export default function AddressPanel(props) {
                     startIcon={null}
                     type="numeric"
                     style={{ width: '30%' }}
-                    value={value.APTNO}
-                    errors={errors.APTNO}
-                    onChange={(val) => handleChange(val, 'APTNO')}
-                    onBlur={() => handleBlur('APTNO')}
+                    value={value.aptNo}
+                    errors={errors.aptNo}
+                    onChange={(val) => handleChange(val, 'aptNo')}
+                    onBlur={() => handleBlur('aptNo')}
                 />
                 <InputField
                     key={111}
@@ -59,10 +59,10 @@ export default function AddressPanel(props) {
                     type="numeric"
                     startIcon={null}
                     style={{ width: '30%' }}
-                    value={value.STNUMBER}
-                    errors={errors.STNUMBER}
-                    onChange={(val) => handleChange(val, 'STNUMBER')}
-                    onBlur={() => handleBlur('STNUMBER')}
+                    value={value.stNo}
+                    errors={errors.stNo}
+                    onChange={(val) => handleChange(val, 'stNo')}
+                    onBlur={() => handleBlur('stNo')}
                 />
             </View>
             <View style={styles.linearGroup}>
@@ -79,16 +79,16 @@ export default function AddressPanel(props) {
                 />
                 <Picker
                     key={120}
-                    name="streettype"
+                    name="stType"
                     label="Street Type"
                     placeholder="  Street Type"
                     important={true}
                     items={STREET_TYPES}
                     startIcon={null}
                     style={{ width: '35%' }}
-                    value={value.streettype}
-                    onChange={(val) => handleChange(val, 'streettype')}
-                    onBlur={() => handleBlur('streettype')}
+                    value={value.stType}
+                    onChange={(val) => handleChange(val, 'stType')}
+                    onBlur={() => handleBlur('stType')}
                 />
             </View>
             <View style={styles.linearGroup}>
@@ -120,17 +120,18 @@ export default function AddressPanel(props) {
                 />
                 <InputField
                     placeholder="Enter postCode "
-                    label="Postcode"
+                    label="postcode"
                     important={true}
                     startIcon={null}
                     type="numeric"
-                    value={value.postCode}
+                    value={value.postcode}
                     style={{ width: '47.5%' }}
-                    onChange={(val) => handleChange(val, 'postCode')}
-                    onBlur={() => handleBlur('postCode')}
+                    onChange={(val) => handleChange(val, 'postcode')}
+                    onBlur={() => handleBlur('postcode')}
                 />
             </View>
             <View style={styles.linearGroup}>
+                {/** Picker->Select */}
                 <Picker
                     key={122}
                     name="county"

@@ -1,3 +1,4 @@
+import React, { useState, useCallback, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import RootTabs from './RootTabs';
@@ -5,6 +6,7 @@ import MyAccountStack from './Stacks/MyAccountStack';
 import Join from '@components/Join/Join';
 import PromotionPage from '../components/screens/Promotion/PromotionPage';
 import ForgotPassword from '../components/screens/Login/ForgotPassword';
+
 const Drawer = createDrawerNavigator();
 
 function NullComponent() {
@@ -43,6 +45,33 @@ export default function RootDrawer() {
                     },
                 })}
             />
+            <Drawer.Screen
+                name="MyAccount"
+                component={MyAccountStack}
+                listeners={({ navigation }) => ({
+                    tabPress: (e) => {
+                        e.preventDefault();
+                        navigation.openDrawer();
+                    },
+                })}
+            />
+
+            {/**
+             * <Tab.Screen
+                name="MyAccount"
+                component={MyAccountStack}
+                listeners={({ navigation }) => ({
+                    tabPress: (e) => {
+                        e.preventDefault();
+                        navigation.openDrawer();
+                    },
+                })}
+                options={() => {
+                    return { title: 'MyAccount - Index' };
+                }}
+            />
+             */}
+
             {/* <Drawer.Screen
                 name="ForgotPassword"
                 component={ForgotPassword}

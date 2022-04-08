@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import CustomSwitch from '../Input/CustomSwitch';
 import AccountLayout from './AccountLayout';
 import MyFormHelperText from '../Input/MyFormHelperText';
-import { fetchDataFromJson } from '../../util/authAPI';
+import { fetchBenefitsRewards } from '../../util/authAPI';
 import { colors } from '@Colors';
 import { fonts } from '@Fonts';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -11,21 +11,35 @@ import CustomAccordion from '../Input/CustomAccordion';
 import EliteBetPanel from '../Join/components/EliteBetPanel';
 import BonusBetPanel from '../Join/components/BonusBetPanel';
 import EliteBoostPanel from '../Join/components/EliteBoostPanel';
+import { UserContext } from '../../context/user/UserProvider';
 export default function AccountBenefitsRewards(props) {
-    const [data, setData] = useState({});
+    const { user } = useContext(UserContext);
+    // const { session } = useSession();
+    const [data, setData] = useState({
+        balance: 0.0,
+        count1: 0,
+        count2: 0,
+        totalCount: 0,
+        reward: 0,
+    });
 
-    const updateData = async () => {
-        console.log('updat2, due to login');
-        const data1 = (await fetchDataFromJson()) || {};
+    useEffect(() => {
+        if (user.user) {
+            updateData(user.user.CLIENTID);
+        }
+    }, []);
+
+    const updateData = async (clientid) => {
+        // console.log('AccountBalanceDialog::updateData');
+
+        const data1 = await fetchBenefitsRewards({
+            clientid,
+        });
+        console.log('MyAccountBenefits: new data', data1);
         setData(data1);
     };
 
-    useEffect(() => {
-        updateData();
-    }, []);
-
     const { balance, count1, count2, totalCount, reward } = data;
-    // console.log('MyAccountBenefits: data', balance);
     const currency = `${balance ? balance : 0}`;
     const cents = '0';
     const balanceString = `$${currency.replace(
@@ -61,6 +75,7 @@ export default function AccountBenefitsRewards(props) {
                             balance={balance}
                             reward={reward}
                             updateData={updateData}
+                            clientid={user.user.CLIENTID}
                         />
                         <TouchableOpacity
                             style={{

@@ -1,7 +1,13 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import React, {
+    useMemo,
+    useState,
+    useEffect,
+    useCallback,
+    useContext,
+} from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import AccountLayout from './AccountLayout';
-import { getDepositLimit, sendDepositLimit } from '../../util/authAPI';
+import { getDepositLimit, proceedDepositLimit } from '../../util/authAPI';
 import { Button3, Button4 } from '../Input/Button';
 import { ScrollView } from 'react-native-gesture-handler';
 import { colors } from '@Colors';
@@ -10,6 +16,7 @@ import InputField from '../Input/InputField';
 import MyFormHelperText from '../Input/MyFormHelperText';
 import { ConfirmModal } from '../Common/ModalLayout';
 import moment from 'moment';
+import { UserContext } from '../../context/user/UserProvider';
 const definedLabels = {
     1: 'Daily',
     7: 'Weekly',
@@ -39,7 +46,9 @@ const notes = [
 ];
 
 export default function GamblingDepositLimit(props) {
-    const clientid = 'testclient';
+    let clientid = 'testclient';
+    const { user } = useContext(UserContext);
+
     const [result, setResult] = useState({
         // status: 200,
         // msg: 'Your request to increase your Deposit Limit has been received. For your protection, your new Daily Deposit Limit will not be applied until 04 April 2022.',
@@ -91,7 +100,10 @@ export default function GamblingDepositLimit(props) {
     }, []);
 
     useEffect(() => {
-        loadDepositeLimitData(clientid);
+        if (user.user) {
+            clientid = user.user.CLIENTID;
+            loadDepositeLimitData(clientid);
+        }
     }, []);
 
     const updateCurrentPeriod = (period) => {
@@ -108,11 +120,11 @@ export default function GamblingDepositLimit(props) {
         // console.log('updateDepositLimitData', data);
         if (action === 1) {
             //reset limit option
-            let res0 = await sendDepositLimit(
-                'testclient',
-                '9999999999999',
-                '99'
-            );
+            let res0 = await proceedDepositLimit({
+                clientid,
+                depositlimit: '9999999999999',
+                period: '99',
+            });
             // console.log('Result From setdepositlimit', res0);
             let res = res0.depositlimit;
             if (res.success) {
@@ -126,7 +138,7 @@ export default function GamblingDepositLimit(props) {
             loadDepositeLimitData('testclient');
         } else if (action === 2) {
             //update limit
-            let res0 = await sendDepositLimit(
+            let res0 = await proceedDepositLimit(
                 'testclient',
                 data.userDepositInput,
                 data.currentPeriod

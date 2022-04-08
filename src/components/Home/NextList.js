@@ -51,9 +51,11 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderTopWidth: 1,
         borderTopColor: '#e2e2e2',
+        paddingHorizontal: 15,
     },
     item0: {
         marginHorizontal: 5,
         paddingVertical: 10,
+        paddingHorizontal: 15,
     },
 });

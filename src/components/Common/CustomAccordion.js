@@ -17,17 +17,17 @@ const CustomAccordionTemplate = (props) => {
         <View style={styles.container}>
             <View style={{ width: '100%' }}>
                 <Image source={{ uri: img }} style={styles.image} />
-                <Text style={{ margin: 12, fontSize: fonts.REGULAR }}>
+                <Text style={{ margin: 15, fontSize: fonts.REGULAR }}>
                     {header}
                 </Text>
-                <View style={{ ...styles.linear, margin: 8 }}>
+                <View style={{ ...styles.linear, margin: 15, marginTop: 0 }}>
                     <CustomButton
                         label="Bet Now"
                         style={{
                             borderRadius: 5,
                             backgroundColor: 'black',
-                            paddingHorizontal: 60,
-                            paddingVertical: 5,
+                            paddingHorizontal: 40,
+                            paddingVertical: 7,
                         }}
                         textStyle={{
                             color: 'white',
@@ -36,21 +36,22 @@ const CustomAccordionTemplate = (props) => {
                         }}
                         onClick={() => alert('Bet Now')}
                     />
-                    <View style={styles.linear}>
-                        <Text style={{ fontSize: fonts.REGULAR }}>
+
+                    <TouchableOpacity
+                        style={styles.linear}
+                        onPress={() => setCollapsed(!collapsed)}
+                    >
+                        <Text
+                            style={{ fontSize: fonts.REGULAR, marginRight: 10 }}
+                        >
                             Terms & Conditions
                         </Text>
-                        <TouchableOpacity
-                            style={{ marginHorizontal: 10 }}
-                            onPress={() => setCollapsed(!collapsed)}
-                        >
-                            {collapsed ? (
-                                <Icon name="angle-down" size={18} />
-                            ) : (
-                                <Icon name="angle-up" size={18} />
-                            )}
-                        </TouchableOpacity>
-                    </View>
+                        {collapsed ? (
+                            <Icon name="angle-down" size={18} />
+                        ) : (
+                            <Icon name="angle-up" size={18} />
+                        )}
+                    </TouchableOpacity>
                 </View>
             </View>
             <Collapsible collapsed={collapsed} align="center">
@@ -58,6 +59,7 @@ const CustomAccordionTemplate = (props) => {
                 <View style={{ height: 'auto' }}>
                     {noteDetails.map((note, idx) => (
                         <Text
+                            key={idx}
                             style={{
                                 fontSize: fonts.REGULAR,
                                 marginVertical: 5,
@@ -83,11 +85,12 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
     },
     image: {
+        width: '100%',
+        minHeight: 120,
         height: 'auto',
-        minHeight: 130,
         marginHorizontal: 0,
         paddingHorizontal: 0,
-        width: '100%',
+
         resizeMode: 'cover',
         borderTopLeftRadius: 6,
         borderTopRightRadius: 6,
@@ -102,6 +105,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
     },
 });
 export default CustomAccordionTemplate;

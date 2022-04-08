@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect, useContext } from 'react';
 import { Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '@components/screens/Home';
@@ -14,7 +14,8 @@ import RaceStack from './Stacks/RacingStack';
 
 import CustomIcon from '@components/Icon/Icon';
 import MyAccountStack from './Stacks/MyAccountStack';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserContext } from '../context/user/UserProvider';
 const Tab = createBottomTabNavigator();
 
 function SettingsScreen() {
@@ -25,7 +26,39 @@ function SettingsScreen() {
     );
 }
 
-export default function RootTabs() {
+export default function RootTabs(props) {
+    const { user } = useContext(UserContext);
+    // console.log('RootTabs user=', user);
+    const [userInfo, setUserInfo] = useState({});
+    const loadUserInfo = useCallback(async () => {
+        const value = await AsyncStorage.getItem('@userInfo');
+        const userInfo2 = JSON.parse(value);
+        // console.log('RootTabs::, userInfo2=', userInfo2);
+        console.log(
+            'userInfo=',
+            userInfo.CLIENTID,
+            ',userinfo2=',
+            userInfo2.CLIENTID
+        );
+        if (userInfo2.CLIENTID !== userInfo.CLIENTID || userInfo === {}) {
+            setUserInfo(userInfo2);
+        }
+    }, []);
+    let interval;
+    // console.log('RootTabs userInfo=', userInfo);
+    useEffect(() => {
+        interval = setInterval(() => {
+            if (!userInfo.CLIENTID || userInfo.CLIENTID === undefined) {
+                loadUserInfo();
+            } else {
+                // console.log('Cleared');
+                return () => clearInterval(interval);
+            }
+        }, 3000);
+        return () => clearInterval(interval);
+    }, [userInfo]);
+
+    // console.log('RootTabs prop=', props);
     return (
         <Tab.Navigator
             screenOptions={({ route }) => {
@@ -69,10 +102,10 @@ export default function RootTabs() {
                     headerTintColor: 'white',
                     headerLeft: () => <HeaderLeft route={route} />,
                     headerRight: () =>
-                        route.name === 'MyAccount' ? (
-                            <HeaderRight2 route={route} />
-                        ) : (
+                        user.isLoggedIn === false ? (
                             <HeaderRight route={route} />
+                        ) : (
+                            <HeaderRight2 route={route} userInfo={userInfo} />
                         ),
                     headerTitle: '',
                 };
@@ -128,7 +161,7 @@ export default function RootTabs() {
                     return { title: 'More' };
                 }}
             />
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="MyAccount"
                 component={MyAccountStack}
                 listeners={({ navigation }) => ({
@@ -140,7 +173,7 @@ export default function RootTabs() {
                 options={() => {
                     return { title: 'MyAccount - Index' };
                 }}
-            />
+            /> */}
         </Tab.Navigator>
     );
 }

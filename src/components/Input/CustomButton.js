@@ -13,6 +13,7 @@ export default function CustomButton(props) {
     const {
         data = undefined,
         icon,
+        iconSize = 14,
         label,
         textStyle = {},
         style = {},
@@ -41,8 +42,8 @@ export default function CustomButton(props) {
             }}
         >
             {iconVisible ? (
-                <View style={{ marginRight: 10 }}>
-                    <SvgIcon name={icon} />
+                <View style={{ marginRight: 4 }}>
+                    <SvgIcon name={icon} size={iconSize} />
                 </View>
             ) : (
                 void 0
@@ -66,13 +67,19 @@ export default function CustomButton(props) {
             }}
         >
             {iconVisible ? (
-                <View style={{ marginRight: 10 }}>
-                    <SvgIcon name={icon} />
+                <View style={{ marginRight: 4 }}>
+                    <SvgIcon name={icon} size={iconSize} />
                 </View>
             ) : (
                 void 0
             )}
-            <Text style={{ fontSize: fonts.MEDIUM, ...textStyle }}>
+            <Text
+                style={{
+                    fontSize: fonts.MEDIUM,
+                    ...textStyle,
+                    fontWeight: isSelected ? 'bold' : 'normal',
+                }}
+            >
                 {label}
             </Text>
         </TouchableOpacity>
@@ -80,7 +87,7 @@ export default function CustomButton(props) {
 }
 const styles = StyleSheet.create({
     buttonContainer: {
-        paddingHorizontal: 10,
+        paddingHorizontal: 15,
         // marginHorizontal: 5,
         display: 'flex',
         flexDirection: 'row',

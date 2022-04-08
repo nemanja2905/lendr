@@ -17,10 +17,12 @@ import FormLabel from '../Input/FormLabel';
 import { colors } from '@Colors';
 import { fonts } from '@Fonts';
 import { config } from '@Config';
-import { fetchDataFromJson } from '../../util/authAPI';
+import { fetchBenefitsRewards } from '../../util/authAPI';
 import { Button2 } from '../Input/Button';
 import { color } from 'react-native-reanimated';
+
 import FormLink from '../Input/Link';
+import { UserContext } from '../../context/user/UserProvider';
 const ModalLayout = (props) => {
     const { isModalVisible, toggleModal, children } = props;
     return (
@@ -32,80 +34,100 @@ const ModalLayout = (props) => {
                         backgroundColor: 'rgba(0,0,0,0.5)',
                         margin: 0,
                         marginTop: 55,
-
                         height: '100%',
                     }}
                     onPress={toggleModal}
                 ></TouchableOpacity>
             }
-            onBackdropPress={toggleModal}
+            // onBackdropPress={toggleModal}
             style={{
                 margin: 0,
+                marginTop: -110,
             }}
         >
-            <View
-                style={{
-                    position: 'absolute',
-                    top: 55,
-                    marginHorizontal: 0,
-
-                    width: '100%',
-                    height: '30%',
-                    backgroundColor: 'white',
-                }}
-            >
-                {children}
-            </View>
+            {children}
         </Modal>
     );
 };
-export default function AccountNavigationMenu(props) {
-    const [isModalVisible, setModalVisible] = useState(true);
-
-    const navigation = useContext(NavigationContext);
-
-    const toggleModal = () => {
-        setModalVisible(!isModalVisible);
-    };
-
-    useEffect(() => {
-        // if (!isModalVisible) {
-        //     navigation.navigate('MyAccount', {
-        //         screen: 'index',
-        //     });
-        // }
-    }, [isModalVisible]);
-
-    useEffect(() => {
-        setModalVisible(true);
-    }, []);
-
-    const name = 'Steve Jones';
-    const username = 'Steve1987';
-    const bonus = '$0.0';
+/**"ALIAS": "bas242",
+  "BALANCE": 11,
+  "BONUSBETBALANCE": 0,
+  "CLIENTID": "U/z06pauULGb1/cxyR8jvXcw+vKK7M3+5TWM8X4oAVAHbymELoDbidLeoC+wBPRh",
+  "CREDITLIMIT": 0,
+  "FIRSTNAME": "Sebastian",
+  "FOLLOWLIST": "",
+  "FULLNAME": "Sebastian Powell",
+  "GTOWEBPAGE": "",
+  "ID": "22095",
+  "ISLOGGEDIN": 1,
+  "LASTLOGIN": "April, 07 2022 18:45:22",
+  "MAILLIST": true,
+  "PENDINGBETSBAL": 0,
+  "POINTSBALANCE": 0,
+  "PROWEB": "",
+  "PUNTACTIVE": 0,
+  "REMEMBERME": "",
+  "ROLES": "",
+  "SHOWBALANCE": 0,
+  "SINGLETAP": 0,
+  "USERID": 0,
+  "VERIFIED": true, */
+export default function AccountBalanceDialog(props) {
+    const { opened, handleClose, navigate, userInfo } = props;
+    // console.log('AccountBalanceDialog userInfo =', userInfo);
+    const { user } = useContext(UserContext);
     // const { session } = useSession();
-    const [data, setData] = useState({});
-
-    const updateData = async () => {
-        console.log('AccountBalanceDialog::updateData');
-        const data1 = (await fetchDataFromJson()) || {};
-        setData(data1);
-    };
+    const [data, setData] = useState({
+        name: user.user.FULLNAME,
+        username: user.user.FIRSTNAME,
+        clientid: user.user.CLIENTID,
+        balance: user.user.BALANCE,
+        reward: user.user.PENDINGBETSBAL,
+        bonusBet: user.user.BONUSBETBALANCE,
+    });
+    // useEffect(() => {
+    //     setData({
+    //         name: userInfo.FULLNAME,
+    //         username: userInfo.FIRSTNAME,
+    //         clientid: userInfo.CLIENTID,
+    //         balance: userInfo.BALANCE,
+    //         reward: userInfo.PENDINGBETSBAL,
+    //         bonusBet: userInfo.BONUSBETBALANCE,
+    //     });
+    // }, [props]);
     useEffect(() => {
-        updateData();
-        // setData(data1);
+        // console.log('AccountBalanceDialog useEffect, newData=', user);
+        updateData(user.user.CLIENTID);
     }, []);
 
-    const { balance, count1, count2, totalCount, reward } = data;
-    // console.log("Session User", session);
+    const updateData = async (clientid) => {
+        // console.log('AccountBalanceDialog::updateData');
+        const data1 = await fetchBenefitsRewards({
+            clientid,
+        });
+        // console.log(
+        //     'fetchBenefitsRewards result=',
+        //     clientid,
+        //     ',',
+        //     data,
+        //     '\n,new=',
+        //     {
+        //         ...data,
+        //         ...data1,
+        //     }
+        // );
+        setData({ ...data, ...data1 });
+    };
 
-    const balanceString = (balance ? balance : 13.0).toLocaleString('en-US', {
-        style: 'currency',
-        currency: 'USD',
-    });
+    const currency = `${data.balance ? data.balance : 0}`;
+    const cents = '0';
+    const balanceString = `$${currency.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        ','
+    )}.${cents}`;
 
     return (
-        <ModalLayout isModalVisible={isModalVisible} toggleModal={toggleModal}>
+        <ModalLayout isModalVisible={opened} toggleModal={handleClose}>
             <View style={styles.modalHeader}>
                 <View style={{ flexGrow: 1, alignItems: 'center' }}>
                     <Text
@@ -114,7 +136,7 @@ export default function AccountNavigationMenu(props) {
                             fontSize: fonts.LARGE,
                         }}
                     >
-                        {name}
+                        {data.name}
                     </Text>
                     <Text
                         style={{
@@ -122,10 +144,10 @@ export default function AccountNavigationMenu(props) {
                             fontSize: fonts.SMALL,
                         }}
                     >
-                        Username:{username}
+                        Username:{data.username}
                     </Text>
                 </View>
-                <TouchableOpacity onPress={toggleModal}>
+                <TouchableOpacity onPress={handleClose}>
                     <Ionicons
                         style={{ alignContent: 'flex-end' }}
                         name="close"
@@ -138,7 +160,8 @@ export default function AccountNavigationMenu(props) {
                 <View style={styles.linear}>
                     <Pressable
                         style={{ ...styles.button, width: '60%' }}
-                        onPress={() => alert('Deposit')}
+                        // onPress={() => alert('Deposit')}
+                        onPress={navigate}
                     >
                         <Text style={styles.text}>+ Deposit</Text>
                     </Pressable>
@@ -167,13 +190,11 @@ export default function AccountNavigationMenu(props) {
                     </View>
                     <View style={styles.centering}>
                         <Text style={styles.font1}>BONUS</Text>
-                        <Text style={styles.font2}>{bonus}</Text>
+                        <Text style={styles.font2}>{data.bonusBet}</Text>
                     </View>
                     <View style={styles.centering}>
                         <Text style={styles.font1}>REWARDS</Text>
-                        <Text style={styles.font2}>
-                            {reward || totalCount} pts
-                        </Text>
+                        <Text style={styles.font2}>{data.reward} pts</Text>
                     </View>
                 </View>
 
@@ -212,8 +233,12 @@ export default function AccountNavigationMenu(props) {
                         >
                             <FormLink
                                 type={1}
-                                value="My Accounts"
+                                value="MyAccount"
                                 startIcon="result"
+                                onClick={() => {
+                                    handleClose();
+                                    navigate();
+                                }}
                             />
                         </View>
                         <View
@@ -234,6 +259,7 @@ export default function AccountNavigationMenu(props) {
                                 type={1}
                                 value="Rewards"
                                 startIcon="champion"
+                                onPress={() => alert('Deposit')}
                             />
                         </View>
                     </View>
