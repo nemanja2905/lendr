@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start-js": "react-scripts start",
-    "start": "set NODE_ENV=production npm-run-all -p watch-css start-js",
+    "start": "set NODE_ENV=development npm-run-all -p watch-css start-js",
     "build-js": "react-scripts build",
     "build": "npm-run-all build-css build-js",
     "test": "react-scripts test --env=jsdom",
