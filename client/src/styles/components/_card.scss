@@ -1,0 +1,71 @@
+.card {
+  &.feed-card {
+    background-color: $fill-white;
+    border: 1px solid $fill-highlight; // border-bottom-width: 0;
+    transition: all 250ms ease;
+    margin-bottom: 20px;
+    &:hover {
+      &.hide {
+        background-color: $border-grey;
+      }
+    }
+    &:last-of-type {
+      border-bottom-width: 1px;
+    }
+    &.hide {
+      // transform: scale(0.95);
+    }
+    &.show {
+      transform: translateY(-10px) scale(1);
+      box-shadow: 0 3px 10px 1px #bdc3cc;
+      border-bottom-width: 1px;
+      margin-bottom: 0;
+    }
+    .card-open-header {
+      transition: all 250ms ease;
+      cursor: pointer;
+      .card-header-status-wrapper {
+        p {
+          &:last-of-type {
+            margin-left: 10px;
+          }
+        }
+      }
+      .toggle-info {
+        &.hide-hover {
+          display: block;
+        }
+        &.show-hover {
+          display: none;
+        }
+      }
+      &:hover {
+        .toggle-info {
+          &.hide-hover {
+            display: none;
+          }
+          &.show-hover {
+            display: block;
+          }
+        }
+      }
+    }
+    &.accepted {
+      border-color: $warning;
+    }
+    &.pending {
+      border-color: $fill-highlight;
+    }
+    &.locked {
+      opacity: 0.3;
+      border-color: $danger;
+    }
+    &.settled {
+      border-color: $success-color;
+    }
+    .card-header {
+      background-color: $fill-highlight;
+      color: $text-medium-grey;
+    }
+  }
+}

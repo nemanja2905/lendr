@@ -1,0 +1,14 @@
+.verify-badge {
+  border-width: 1px;
+  border-style: solid;
+  padding: 8px;
+  display: inline;
+  background-color: $danger-color;
+  color: $white;
+  .oi {
+    margin-right: 8px;
+  }
+  &.verified {
+    background-color: $success-color;
+  }
+}

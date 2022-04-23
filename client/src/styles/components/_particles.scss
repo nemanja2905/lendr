@@ -1,0 +1,11 @@
+.particle-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100%;
+  background: #007bff;
+  /* fallback for old browsers */
+  // background: -webkit-linear-gradient(to top, #007bff, #83a4d4);  /* Chrome 10-25, Safari 5.1-6 */
+  // background: linear-gradient(to top, #007bff, #83a4d4); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}

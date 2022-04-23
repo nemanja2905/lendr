@@ -1,0 +1,27 @@
+// Bootstrap
+@import './bootstrap/bootstrap.scss';
+@import './iconic/css/open-iconic-bootstrap.scss';
+
+// Common
+@import './components/_variables.scss';
+@import './components/_animations.scss';
+@import './components/_helpers.scss';
+
+// Layout
+@import './components/_layout.scss';
+
+// Components
+@import './components/_card.scss';
+@import './components/_badges.scss';
+@import './components/_buttons.scss';
+@import './components/_loans.scss';
+@import './components/_modal.scss';
+@import './components/_sidebar.scss';
+@import './components/_navbar.scss';
+@import './components/_notifications.scss';
+@import './components/_profile.scss';
+@import './components/_review.scss';
+
+// Vendor
+@import './components/_DayPicker.scss';
+@import './components/_particles.scss';

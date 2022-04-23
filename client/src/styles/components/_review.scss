@@ -1,0 +1,13 @@
+.review-display-wrapper {
+  padding: 10px; // padding-left: 50px;
+  background-color: $fill-lighter-grey;
+  border-top: 1px solid $border-grey;
+  .review-display-memo {}
+  .review-display-stars {
+    color: $fill-star;
+  }
+  .review-display-pic {
+    max-width: 60px;
+    border-radius: 100%;
+  }
+}

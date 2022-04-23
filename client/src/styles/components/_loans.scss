@@ -1,0 +1,64 @@
+.ratings-entry-wrapper {
+  .stars {
+    justify-content: center;
+    span {
+      margin: 8px;
+      cursor: pointer;
+      font-size: 40px;
+      color: $border-grey;
+      &.active {
+        color: $fill-star;
+      }
+    }
+  }
+}
+
+.settings-wrapper,
+.new-loan-entry-wrapper {
+  .step-wrapper {
+    border-right: 1px solid $border-grey;
+    .step-indicator {
+      display: inline-block;
+      width: 100%;
+      padding: 8px 10px;
+      cursor: pointer;
+      &:hover,
+      &.active {
+        background-color: $fill-highlight;
+        color: $fill-white;
+      }
+    }
+  }
+  .new-loan-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: 100%;
+    .new-loan-input-content,
+    .new-loan-pagination {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+    }
+    .new-loan-input-content {
+      flex: 1;
+      .step {
+        flex: 1;
+        flex-direction: row;
+      }
+    }
+    .new-loan-pagination {
+      justify-content: space-between;
+      span {
+        cursor: pointer;
+        background-color: $fill-highlight;
+        color: $fill-white;
+      }
+    }
+    .new-loan-input {
+      border: none;
+      border-bottom: 1px solid $border-grey;
+      font-size: 40px;
+    }
+  }
+}

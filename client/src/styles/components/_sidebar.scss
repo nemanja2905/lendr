@@ -1,0 +1,36 @@
+$navbar-height: 69px;
+
+.sidebar {
+  position: sticky;
+  top: $navbar-height;
+  height: calc(100vh - 69px);
+  padding-top: .5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: $navy-blue;
+
+  .nav-link {
+    margin: 25px 0;
+    padding: 25px;
+
+    svg {
+      width: 22px;
+      margin: 0 auto;
+      opacity: 0.6;
+    }
+
+    &.active {
+      border-left: 2px solid $white;
+      
+      svg {
+        opacity: 1;
+      }
+    }
+
+    &:hover {
+      svg {
+        opacity: 1;
+      }
+    }
+  }
+}

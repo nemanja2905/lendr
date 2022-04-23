@@ -1,0 +1,44 @@
+/* fills */
+$success-color: #47D09D; // green
+$danger-color: #E5382E;
+$fill-highlight: $primary; // blue
+$fill-highlight-lighter: #f0f8ff;
+$fill-star: #F5A623; // gold
+$fill-price-range: #AADD74; // light green
+$fill-dark-grey: #4D4E52;
+$fill-light-grey: #EAEAEA;
+$fill-lighter-grey: #FAFAFA;
+$fill-white: #FFFFFF;
+$fill-none: transparent;
+/* text */
+
+$text-default: $fill-dark-grey;
+$text-highlight: $fill-highlight; // blue
+$text-star: $fill-star; // gold
+$text-price-range: $fill-price-range; // light green
+$text-medium-grey: #7A7A7A;
+$text-light-grey: #AAAAAA;
+$text-white: $fill-white;
+/* links */
+
+$link-default: $text-highlight;
+
+/* borders */
+$border-grey: #DADADA;
+$border-dark-grey: #AAAAAA;
+$border-light-grey: #EAEAEA;
+
+// colors
+$light-blue: #1585f1;
+$light-blue-2: #097ce4;
+$light-blue-grey: #506876;
+$medium-blue: #1e3d4f;
+$navy-blue: #05273b;
+$white: #ffffff;
+$light-grey: #f6fafd;
+$light-green: #2ad07f;
+
+$light-blue-text: $light-blue-2;
+$light-grey-bg: $light-grey;
+$success-green: $light-green;
+$body-text: $navy-blue;

@@ -1,0 +1,75 @@
+.alert {
+  border: none;
+  padding: 20px;
+  width: 100%;
+  transform: translateY(-20px);
+  animation: alertAnimation 1000ms linear 1 both;
+  &.alert-danger {
+    background-color: $danger-color;
+    color: $fill-white;
+  }
+  &.alert-success {
+    background-color: $success-color;
+    color: $fill-white;
+  }
+}
+
+.notification-link {
+  cursor: pointer;
+  position: relative;
+  transition: all 250ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  span {
+    &.indicator {
+      border: 1px solid $fill-highlight;
+      padding: 4px;
+      background-color: $fill-white;
+      pre {
+        color: $text-highlight;
+        margin: 0;
+        font-size: 12px;
+      }
+    }
+  }
+  &:hover {
+    background-color: $fill-highlight;
+    span {
+      color: $fill-white;
+      &.indicator {
+        pre {
+          color: $text-highlight;
+        }
+      }
+    }
+  }
+  .notification-popout {
+    position: absolute;
+    left: calc(100% - 15px);
+    z-index: 9;
+    top: 0;
+    min-width: 400px;
+  }
+}
+
+.loading-bar {
+  height: 3px;
+  width: 100%;
+  left: 0;
+  top: 0;
+  position: fixed;
+  z-index: 999;
+  background: rgba(255, 255, 255, 0.8);
+  &:after {
+    content: "";
+    height: 6px;
+    background: $fill-highlight;
+    position: fixed;
+    width: 40px;
+    animation: loader 2s infinite;
+    top: 0;
+    margin-left: 0;
+    z-index: 999;
+  }
+}
