@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start-js": "react-scripts start",
-    "start": "NODE_ENV=development npm-run-all -p watch-css start-js",
+    "start": "set NODE_ENV=production npm-run-all -p watch-css start-js",
     "build-js": "react-scripts build",
     "build": "npm-run-all build-css build-js",
     "test": "react-scripts test --env=jsdom",
@@ -19,7 +19,6 @@
     "@fortawesome/react-fontawesome": "0.0.19",
     "bootstrap": "^3.3.7",
     "lodash": "^4.17.4",
-    "node-sass-chokidar": "0.0.3",
     "npm-run-all": "^4.1.2",
     "react": "^16.2.0",
     "react-day-picker": "^7.0.5",
