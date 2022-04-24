@@ -3,15 +3,7 @@ const _ = require('lodash');
 const isProduction = _.get(process, 'env.NODE_ENV', false) === 'production';
 
 const knexConfig = isProduction ?
-  {
-    dialect: 'pg',
-    connection: {
-      host: 'localhost',
-      user: 'app',
-      password: 'appusertest',
-      database: 'lender_api_dev'
-  }
-  } :
+  
   {
    dialect: 'pg',
     connection: {
@@ -20,6 +12,14 @@ const knexConfig = isProduction ?
       password: process.env.SQL_PASSWORD,
       database: process.env.SQL_DATABASE,
     }
+}:{
+    dialect: 'pg',
+    connection: {
+      host: 'localhost',
+      user: 'app',
+      password: 'appusertest',
+      database: 'lender_api_dev'
+  }
 };
 
 module.exports = knexConfig

@@ -27,7 +27,8 @@ class IAVStep extends Component {
         this.setState({
           iavLoaded: true
         });
-        window.dwolla.configure('sandbox');
+        window.dwolla.configure('');
+        //window.dwolla.configure('sandbox');
         this.initializeIAV();
         clearInterval(this.interval);
       }

@@ -20,6 +20,7 @@ var dwollaClient = new dwolla.Client({
   environment: appConfig.dwollaEnvironment,
 });
 
+console.log('dwollaClient, data=',dwollaClient);
 const TOKEN = dwollaClient.auth.client()
   .then((appToken) => {
     return appToken.get('webhook-subscriptions');
